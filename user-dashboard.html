@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>My Dashboard — Fun &amp; Earning</title>
+<link rel="stylesheet" href="styles.css">
+<link rel="stylesheet" href="assets/site-background.css">
+<link rel="stylesheet" href="dashboard.css">
+<link rel="stylesheet" href="support.css">
+<link rel="stylesheet" href="games.css">
+<link rel="stylesheet" href="assets/game-themes.css">
+</head>
+<body>
+
+<header class="dash-header">
+  <a href="login.html" class="logo">Fun <span>&amp;</span> Earning</a>
+  <div class="dash-user">
+    <span class="role-badge">User</span>
+    <span id="dash-user-name"></span>
+    <span class="wallet-pill" id="wallet-pill">0 tokens</span>
+    <button class="dash-logout" id="dash-logout-btn">Logout</button>
+  </div>
+</header>
+
+<main class="dash-main">
+  <div class="dash-tabs">
+    <button class="dash-tab active" data-target="panel-profile">Profile</button>
+    <button class="dash-tab" data-target="panel-games">Games</button>
+    <button class="dash-tab" data-target="panel-wallet">Wallet</button>
+    <button class="dash-tab" data-target="panel-referral">Refer &amp; Earn</button>
+    <button class="dash-tab" data-target="panel-support">Support</button>
+  </div>
+
+  <!-- Games -->
+  <section id="panel-games" class="dash-panel">
+    <div class="win-ticker" id="win-ticker" style="display:none;">
+      <div class="win-ticker-track" id="win-ticker-track"></div>
+    </div>
+
+    <div id="games-grid-view">
+      <div class="games-lobby-toolbar" id="games-toolbar"></div>
+      <div id="games-recent-row"></div>
+      <div class="games-grid" id="games-grid"></div>
+    </div>
+
+    <div id="game-play-view" style="display:none;"></div>
+  </section>
+
+  <!-- Profile -->
+  <section id="panel-profile" class="dash-panel active">
+    <div style="display:flex; justify-content:flex-end; margin-bottom:0.75rem;">
+      <button type="button" class="inline-btn ghost" id="profile-refresh-btn">↻ Refresh</button>
+    </div>
+    <div class="dash-grid">
+      <div class="dash-card">
+        <h3>Name</h3>
+        <p class="hint" id="profile-name" style="font-size:1.1rem; color: var(--text);">—</p>
+      </div>
+      <div class="dash-card">
+        <h3>Mobile Number</h3>
+        <p class="hint" id="profile-phone" style="font-size:1.1rem; color: var(--text);">—</p>
+      </div>
+      <div class="dash-card">
+        <h3>Account Status</h3>
+        <p class="hint" id="profile-status" style="font-size:1.1rem; color: var(--text);">—</p>
+      </div>
+      <div class="dash-card">
+        <h3>Member Since</h3>
+        <p class="hint" id="profile-created" style="font-size:1.1rem; color: var(--text);">—</p>
+      </div>
+      <div class="dash-card">
+        <h3>Your Support Agent</h3>
+        <p class="hint" id="profile-subadmin" style="font-size:1.1rem; color: var(--text);">—</p>
+      </div>
+    </div>
+
+    <div class="dash-card" style="margin-top:1.5rem;">
+      <h3>Email Address</h3>
+      <p class="hint" style="margin-bottom:0.75rem;">Used to recover your account if you forget your password.</p>
+      <div id="email-card"></div>
+    </div>
+  </section>
+
+  <!-- Wallet -->
+  <section id="panel-wallet" class="dash-panel">
+    <div style="display:flex; justify-content:flex-end; margin-bottom:0.75rem;">
+      <button type="button" class="inline-btn ghost" id="wallet-refresh-btn" data-testid="wallet-refresh-btn">↻ Refresh</button>
+    </div>
+    <div class="dash-grid">
+      <div class="dash-card">
+        <h3>Total Balance</h3>
+        <div class="stat" id="wallet-balance">0</div>
+        <p class="hint">Deposit + winnings combined</p>
+      </div>
+      <div class="dash-card">
+        <h3>Deposit Balance</h3>
+        <div class="stat" id="wallet-deposit-balance">0</div>
+        <p class="hint">Your deposited amount — spendable on games, never withdrawable</p>
+      </div>
+      <div class="dash-card">
+        <h3>Referral Balance</h3>
+        <div class="stat" id="wallet-referral-balance">0</div>
+        <p class="hint">Referral rewards &amp; commission — playable on games, not withdrawable until won</p>
+      </div>
+      <div class="dash-card">
+        <h3>Winning Balance</h3>
+        <div class="stat" id="wallet-winning-balance">0</div>
+        <p class="hint">Genuine game winnings — fully withdrawable</p>
+      </div>
+      <div class="dash-card">
+        <h3>Withdrawable Balance</h3>
+        <div class="stat" id="wallet-withdrawable-balance">0</div>
+        <p class="hint">The amount you can actually withdraw right now</p>
+      </div>
+    </div>
+    <p class="form-note" style="margin: 0 0 1.5rem;">
+      <strong>Only your winning balance can be withdrawn.</strong> Deposited tokens and referral tokens are both
+      for playing games, not for withdrawing directly. Games spend your deposit balance first, then your
+      referral balance, then your winning balance last — and any bet you <em>win</em>, whichever balance funded it,
+      pays out as withdrawable winning balance. Unused deposit or referral tokens never turn withdrawable on their own.
+    </p>
+
+    <div class="dash-card" style="margin-bottom: 1.5rem;">
+      <h3>Ways to Pay In</h3>
+      <p class="hint" style="margin-bottom: 0.75rem;">Send payment using one of these methods, then submit a deposit request below with the amount.</p>
+      <div id="payment-methods-list"></div>
+    </div>
+
+    <div class="deposit-instructions" id="deposit-instructions-box" style="display:none;">
+      <h3>Before You Deposit</h3>
+      <div class="limits-row">
+        <span>Minimum: <b id="deposit-min-amount">—</b> tokens</span>
+        <span>Maximum: <b id="deposit-max-amount">—</b> tokens</span>
+      </div>
+      <pre id="deposit-instructions-text"></pre>
+    </div>
+
+    <form id="deposit-form" class="inline-form" novalidate data-testid="deposit-form">
+      <div class="field">
+        <label for="deposit-amount">Amount (tokens)</label>
+        <input type="number" id="deposit-amount" min="1" step="1" placeholder="Amount" required data-testid="deposit-amount-input">
+      </div>
+      <div class="field">
+        <label for="deposit-method">Payment Method</label>
+        <input type="text" id="deposit-method" list="deposit-method-options" placeholder="e.g. UPI" required data-testid="deposit-method-input">
+        <datalist id="deposit-method-options"></datalist>
+      </div>
+      <div class="field" style="flex:1; min-width: 200px;">
+        <label for="deposit-reference">Transaction / Reference ID</label>
+        <input type="text" id="deposit-reference" placeholder="e.g. UPI ref / UTR number" required data-testid="deposit-reference-input">
+      </div>
+      <div class="field" style="flex:1; min-width: 220px;">
+        <label for="deposit-note">Note (optional)</label>
+        <input type="text" id="deposit-note" placeholder="Anything else the reviewer should know">
+      </div>
+      <div class="field" style="width:100%; min-width:100%;">
+        <label>Payment Screenshot (required)</label>
+        <input type="file" id="deposit-screenshot" accept="image/jpeg,image/png,image/webp" style="display:none;" data-testid="deposit-screenshot-input">
+        <div class="image-picker-dropzone" id="deposit-screenshot-dropzone" data-testid="deposit-screenshot-dropzone">
+          <div id="deposit-screenshot-preview"></div>
+          <span class="image-picker-hint">Click or drop a screenshot of your payment (JPG, PNG or WebP, max 5MB)</span>
+        </div>
+      </div>
+      <button type="submit" class="inline-btn" data-testid="deposit-submit-btn">Submit Deposit Request</button>
+      <p class="form-note" id="deposit-note-msg"></p>
+    </form>
+
+    <form id="withdraw-form" class="inline-form">
+      <div class="field">
+        <label for="withdraw-amount">Request Withdrawal (tokens)</label>
+        <input type="number" id="withdraw-amount" min="1" step="1" placeholder="Amount" required>
+      </div>
+      <div class="field" style="flex:1; min-width: 220px;">
+        <label for="withdraw-details">Send To</label>
+        <input type="text" id="withdraw-details" placeholder="e.g. bank account / UPI ID" required>
+      </div>
+      <button type="submit" class="inline-btn">Submit Withdrawal Request</button>
+      <p class="form-note">You can withdraw up to your <strong>winning balance</strong> only — deposited tokens cannot be withdrawn.</p>
+      <p class="form-note" id="withdraw-note-msg"></p>
+    </form>
+
+    <h2 class="dash-section-title">Deposit History</h2>
+    <div class="table-wrap">
+      <table class="dash-table">
+        <thead><tr><th>Amount</th><th>Method</th><th>Reference</th><th>Status</th><th>Requested</th><th>Screenshot</th></tr></thead>
+        <tbody id="deposits-body"></tbody>
+      </table>
+    </div>
+
+    <h2 class="dash-section-title">Withdrawal History</h2>
+    <div class="table-wrap">
+      <table class="dash-table">
+        <thead><tr><th>Amount</th><th>Send To</th><th>Status</th><th>Requested</th></tr></thead>
+        <tbody id="withdrawals-body"></tbody>
+      </table>
+    </div>
+
+    <h2 class="dash-section-title">Wallet Transaction History</h2>
+    <div class="table-wrap">
+      <table class="dash-table">
+        <thead><tr><th>Type</th><th>Amount</th><th>Balance After</th><th>Referral After</th><th>Withdrawable After</th><th>Date</th></tr></thead>
+        <tbody id="wallet-tx-body"></tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- Refer & Earn -->
+  <section id="panel-referral" class="dash-panel">
+    <div style="display:flex; justify-content:flex-end; margin-bottom:0.75rem;">
+      <button type="button" class="inline-btn ghost" id="referral-refresh-btn" data-testid="referral-refresh-btn">↻ Refresh</button>
+    </div>
+    <div class="dash-card" style="margin-bottom:1.5rem;">
+      <h3>Your Referral Code</h3>
+      <div class="email-card-row">
+        <span class="email-card-address" id="referral-code" data-testid="referral-code">—</span>
+        <button type="button" class="inline-btn ghost" id="referral-copy-code-btn">Copy Code</button>
+      </div>
+      <p class="hint" style="margin:0.75rem 0 0.25rem;">Share your link — friends who sign up with it and you both benefit:</p>
+      <div class="email-card-row">
+        <span class="hint" id="referral-link" data-testid="referral-link" style="word-break:break-all;">—</span>
+        <button type="button" class="inline-btn ghost" id="referral-copy-link-btn">Copy Link</button>
+      </div>
+    </div>
+
+    <div class="dash-grid">
+      <div class="dash-card">
+        <h3>Total Referred</h3>
+        <div class="stat" id="referral-total">0</div>
+        <p class="hint">People who signed up with your code</p>
+      </div>
+      <div class="dash-card">
+        <h3>Qualified Referrals</h3>
+        <div class="stat" id="referral-qualified">0</div>
+        <p class="hint">Have made at least one approved deposit</p>
+      </div>
+      <div class="dash-card">
+        <h3>Referral Rewards Earned</h3>
+        <div class="stat" id="referral-reward-earned">0</div>
+        <p class="hint">50 tokens per deposit under ₹500, 500 tokens per deposit ₹500+</p>
+      </div>
+      <div class="dash-card">
+        <h3>Total Referral Earnings</h3>
+        <div class="stat" id="referral-total-earned">0</div>
+        <p class="hint">Added to your referral balance — playable now, withdrawable once you win with it</p>
+      </div>
+    </div>
+
+    <p class="form-note" style="margin: 0 0 1.5rem;">
+      How it works: every time someone who signed up with your code makes an approved deposit, you earn a reward
+      sized by that deposit — <strong>50 tokens</strong> for a deposit under ₹500, or <strong>500 tokens</strong>
+      for a deposit of ₹500 or more. This applies to every one of their deposits, not just their first. Rewards are
+      added to your <strong>referral balance</strong> — you can play games with it right away, but it only becomes
+      withdrawable once you actually win a bet with it (the win itself is credited as withdrawable winning balance,
+      same as winning with deposited tokens).
+    </p>
+
+    <h2 class="dash-section-title">Referred Users</h2>
+    <div class="table-wrap">
+      <table class="dash-table">
+        <thead><tr><th>Name</th><th>Phone</th><th>Status</th><th>Joined</th><th>Qualified</th></tr></thead>
+        <tbody id="referral-users-body"></tbody>
+      </table>
+    </div>
+
+    <h2 class="dash-section-title">Referral Earnings History</h2>
+    <div class="table-wrap">
+      <table class="dash-table">
+        <thead><tr><th>Type</th><th>Amount</th><th>Date</th></tr></thead>
+        <tbody id="referral-history-body"></tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- Support -->
+  <section id="panel-support" class="dash-panel">
+    <div class="chat-card">
+      <div class="chat-messages" id="chat-messages"></div>
+      <div class="chat-attach-preview" id="chat-attach-preview"></div>
+      <form id="chat-form" class="chat-input-row">
+        <input type="file" id="chat-attachment-input" accept="image/jpeg,image/png,image/webp" style="display:none;" data-testid="chat-attachment-input">
+        <button type="button" class="chat-attach-btn" id="chat-attach-btn" title="Attach a screenshot" aria-label="Attach a screenshot" data-testid="chat-attach-btn">📎</button>
+        <input type="text" id="chat-input" placeholder="Type a message to your support agent..." maxlength="1000" required>
+        <button type="submit" class="inline-btn">Send</button>
+      </form>
+    </div>
+  </section>
+</main>
+
+<div class="lightbox-overlay hidden" id="image-lightbox">
+  <div class="lightbox-content">
+    <button type="button" class="lightbox-close" id="image-lightbox-close" aria-label="Close">&times;</button>
+    <img id="image-lightbox-img" alt="Full size preview">
+  </div>
+</div>
+
+<script src="assets/site-background.js"></script>
+<script src="dashboard-common.js"></script>
+<script src="email-account.js"></script>
+<script src="user-dashboard.js"></script>
+<script src="assets/audio-engine.js"></script>
+<script src="assets/theme-engine.js"></script>
+<script src="assets/theme-config.js"></script>
+<script src="games/aviator.js"></script>
+<script src="games/number-prediction.js"></script>
+<script src="games/andar-bahar.js"></script>
+<script src="games/dice-roll.js"></script>
+<script src="games/coin-flip.js"></script>
+<script src="games.js"></script>
+</body>
+</html>

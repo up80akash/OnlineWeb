@@ -1,0 +1,10 @@
+node_modules/
+server/node_modules/
+server/data.sqlite
+server/data.sqlite-journal
+server/data.sqlite-wal
+server/data.sqlite-shm
+server/.env
+*.log
+.DS_Store
+Thumbs.db

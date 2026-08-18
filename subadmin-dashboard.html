@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sub-Admin Dashboard — Fun &amp; Earning</title>
+<link rel="stylesheet" href="styles.css">
+<link rel="stylesheet" href="assets/site-background.css">
+<link rel="stylesheet" href="dashboard.css">
+<link rel="stylesheet" href="support.css">
+</head>
+<body>
+
+<header class="dash-header">
+  <a href="login.html" class="logo">Fun <span>&amp;</span> Earning</a>
+  <div class="dash-user">
+    <span class="role-badge">Sub-Admin</span>
+    <span id="dash-user-name"></span>
+    <span class="wallet-pill" id="wallet-pill">0 tokens</span>
+    <button class="dash-logout" id="dash-logout-btn">Logout</button>
+  </div>
+</header>
+
+<main class="dash-main">
+  <div class="dash-tabs">
+    <button class="dash-tab active" data-target="panel-overview">Overview</button>
+    <button class="dash-tab" data-target="panel-deposits">My Deposits</button>
+    <button class="dash-tab" data-target="panel-payments">Payment Details</button>
+    <button class="dash-tab" data-target="panel-users">Users</button>
+    <button class="dash-tab" data-target="panel-user-deposits">User Deposits</button>
+    <button class="dash-tab" data-target="panel-user-withdrawals">User Withdrawals</button>
+    <button class="dash-tab" data-target="panel-support">Support</button>
+  </div>
+
+  <!-- Overview -->
+  <section id="panel-overview" class="dash-panel active">
+    <div class="dash-grid">
+      <div class="dash-card">
+        <h3>Your Wallet</h3>
+        <div class="stat" id="overview-balance">0</div>
+        <p class="hint">Tokens received from the admin</p>
+      </div>
+      <div class="dash-card">
+        <h3>Managed Users</h3>
+        <div class="stat" id="stat-user-count">0</div>
+        <p class="hint"><span id="stat-locked-users">0</span> locked</p>
+      </div>
+      <div class="dash-card">
+        <h3>Users' Total Balance</h3>
+        <div class="stat" id="stat-total-user-balance">0</div>
+        <p class="hint">Tokens held across all your users</p>
+      </div>
+      <div class="dash-card">
+        <h3>Pending Deposits</h3>
+        <div class="stat" id="stat-pending-deposits">0</div>
+        <p class="hint">Awaiting your approval</p>
+      </div>
+      <div class="dash-card">
+        <h3>Pending Withdrawals</h3>
+        <div class="stat" id="stat-pending-withdrawals">0</div>
+        <p class="hint">Awaiting your approval</p>
+      </div>
+      <div class="dash-card">
+        <h3>Approved Volume (7d)</h3>
+        <div class="stat" id="stat-approved-volume">0</div>
+        <p class="hint"><span id="stat-deposit-volume">0</span> in · <span id="stat-withdrawal-volume">0</span> out</p>
+      </div>
+      <div class="dash-card">
+        <h3>Unread Support</h3>
+        <div class="stat" id="stat-unread-support">0</div>
+        <p class="hint">Threads awaiting your reply</p>
+      </div>
+    </div>
+
+    <div class="dash-card" style="margin-top:1.5rem;">
+      <h3>Your Email Address</h3>
+      <p class="hint" style="margin-bottom:0.75rem;">Required to use "Forgot password?" on the login page.</p>
+      <div id="email-card"></div>
+    </div>
+  </section>
+
+  <!-- Deposits -->
+  <section id="panel-deposits" class="dash-panel">
+    <form id="deposit-form" class="inline-form">
+      <div class="field">
+        <label for="deposit-amount">Request Deposit (tokens)</label>
+        <input type="number" id="deposit-amount" min="1" step="1" placeholder="Amount" required>
+      </div>
+      <div class="field" style="flex:1; min-width: 220px;">
+        <label for="deposit-note">Note (optional)</label>
+        <input type="text" id="deposit-note" placeholder="e.g. reason for deposit">
+      </div>
+      <button type="submit" class="inline-btn">Submit Request</button>
+      <p class="form-note" id="deposit-note-msg"></p>
+    </form>
+
+    <h2 class="dash-section-title">Your Deposit Requests</h2>
+    <div class="table-wrap">
+      <table class="dash-table">
+        <thead>
+          <tr><th>Amount</th><th>Note</th><th>Status</th><th>Requested</th><th>Reviewed</th></tr>
+        </thead>
+        <tbody id="deposits-body"></tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- Payment Details -->
+  <section id="panel-payments" class="dash-panel">
+    <p class="hint" style="margin-bottom: 1rem;">
+      These are the payment methods your users see when depositing tokens to you. Submit one for
+      admin approval — once approved, it becomes visible to your users.
+    </p>
+    <form id="payment-form" class="inline-form">
+      <div class="field">
+        <label for="payment-method">Payment Method</label>
+        <input type="text" id="payment-method" placeholder="e.g. Bank Transfer, UPI" required>
+      </div>
+      <div class="field" style="flex:1; min-width: 260px;">
+        <label for="payment-details">Details</label>
+        <input type="text" id="payment-details" placeholder="e.g. account number / UPI ID" required>
+      </div>
+      <button type="submit" class="inline-btn">Submit for Approval</button>
+      <p class="form-note" id="payment-note-msg"></p>
+    </form>
+
+    <h2 class="dash-section-title">Your Payment Detail Requests</h2>
+    <div class="table-wrap">
+      <table class="dash-table">
+        <thead>
+          <tr><th>Method</th><th>Details</th><th>Status</th><th>Requested</th><th>Reviewed</th></tr>
+        </thead>
+        <tbody id="payments-body"></tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- Users -->
+  <section id="panel-users" class="dash-panel">
+    <h2 class="dash-section-title">Your Users</h2>
+    <div class="games-lobby-toolbar" style="margin-bottom:1.25rem;">
+      <input type="text" class="games-search" id="users-search-input" placeholder="Search by name or phone...">
+      <select id="users-status-filter" style="padding:0.65rem 1rem; border-radius:10px; border:1px solid rgba(255,255,255,0.12); background:rgba(255,255,255,0.03); color:var(--text);">
+        <option value="">All statuses</option>
+        <option value="active">Active</option>
+        <option value="locked">Locked</option>
+      </select>
+    </div>
+    <div class="table-wrap">
+      <table class="dash-table">
+        <thead>
+          <tr><th>Name</th><th>Phone</th><th>Email</th><th>Email Verified</th><th>Status</th><th>Wallet</th><th>Joined</th><th>Actions</th></tr>
+        </thead>
+        <tbody id="users-body"></tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- User Deposits -->
+  <section id="panel-user-deposits" class="dash-panel">
+    <h2 class="dash-section-title">User Deposit Requests</h2>
+    <div class="games-lobby-toolbar" style="margin-bottom:1.25rem;">
+      <input type="text" class="games-search" id="user-deposits-search-input" placeholder="Search by user name or phone...">
+      <select id="user-deposits-status-filter" style="padding:0.65rem 1rem; border-radius:10px; border:1px solid rgba(255,255,255,0.12); background:rgba(255,255,255,0.03); color:var(--text);">
+        <option value="">All statuses</option>
+        <option value="pending">Pending</option>
+        <option value="approved">Approved</option>
+        <option value="rejected">Rejected</option>
+      </select>
+    </div>
+    <div class="table-wrap">
+      <table class="dash-table">
+        <thead>
+          <tr><th>User</th><th>Amount</th><th>Method</th><th>Reference</th><th>Screenshot</th><th>Status</th><th>Requested</th><th>Actions</th></tr>
+        </thead>
+        <tbody id="user-deposits-body"></tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- User Withdrawals -->
+  <section id="panel-user-withdrawals" class="dash-panel">
+    <h2 class="dash-section-title">User Withdrawal Requests</h2>
+    <div class="games-lobby-toolbar" style="margin-bottom:1.25rem;">
+      <input type="text" class="games-search" id="user-withdrawals-search-input" placeholder="Search by user name or phone...">
+      <select id="user-withdrawals-status-filter" style="padding:0.65rem 1rem; border-radius:10px; border:1px solid rgba(255,255,255,0.12); background:rgba(255,255,255,0.03); color:var(--text);">
+        <option value="">All statuses</option>
+        <option value="pending">Pending</option>
+        <option value="approved">Approved</option>
+        <option value="rejected">Rejected</option>
+      </select>
+    </div>
+    <div class="table-wrap">
+      <table class="dash-table">
+        <thead>
+          <tr><th>User</th><th>Amount</th><th>Send To</th><th>Status</th><th>Requested</th><th>Actions</th></tr>
+        </thead>
+        <tbody id="user-withdrawals-body"></tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- Support -->
+  <section id="panel-support" class="dash-panel">
+    <h2 class="dash-section-title">User Support</h2>
+    <div class="support-layout">
+      <div class="thread-list" id="thread-list"></div>
+      <div class="chat-card">
+        <div class="chat-messages" id="chat-messages">
+          <p class="chat-empty">Select a user on the left to view the conversation.</p>
+        </div>
+        <div class="chat-attach-preview" id="chat-attach-preview"></div>
+        <form id="chat-form" class="chat-input-row">
+          <input type="file" id="chat-attachment-input" accept="image/jpeg,image/png,image/webp" style="display:none;">
+          <button type="button" class="chat-attach-btn" id="chat-attach-btn" title="Attach a screenshot" aria-label="Attach a screenshot" disabled>📎</button>
+          <input type="text" id="chat-input" placeholder="Type a reply..." maxlength="1000" disabled required>
+          <button type="submit" class="inline-btn" disabled>Send</button>
+        </form>
+      </div>
+    </div>
+  </section>
+</main>
+
+<div class="modal-overlay hidden" id="password-modal">
+  <div class="modal-card">
+    <h3>Change User Password</h3>
+    <div class="field">
+      <label for="modal-password">New Password</label>
+      <input type="password" id="modal-password" placeholder="Min 6 characters">
+    </div>
+    <p class="form-note" id="modal-note"></p>
+    <div class="modal-actions">
+      <button class="inline-btn ghost" id="modal-cancel" type="button">Cancel</button>
+      <button class="inline-btn" id="modal-confirm" type="button">Save</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal-overlay hidden" id="user-detail-modal">
+  <div class="modal-card" style="max-width:600px; max-height:85vh; overflow-y:auto;">
+    <h3 id="user-detail-name">User</h3>
+    <div class="dash-grid" id="user-detail-stats" style="margin-bottom:1rem;"></div>
+
+    <div class="games-admin-subtabs" id="user-detail-subtabs"></div>
+    <div id="user-detail-content" style="margin-bottom:1rem;"></div>
+
+    <div class="modal-actions">
+      <button class="inline-btn ghost" id="user-detail-close" type="button">Close</button>
+      <button class="inline-btn ghost" id="user-detail-password" type="button">Change Password</button>
+      <button class="inline-btn danger" id="user-detail-toggle-lock" type="button"></button>
+    </div>
+  </div>
+</div>
+
+<div class="lightbox-overlay hidden" id="image-lightbox">
+  <div class="lightbox-content">
+    <button type="button" class="lightbox-close" id="image-lightbox-close" aria-label="Close">&times;</button>
+    <img id="image-lightbox-img" alt="Full size preview">
+  </div>
+</div>
+
+<script src="assets/site-background.js"></script>
+<script src="dashboard-common.js"></script>
+<script src="email-account.js"></script>
+<script src="subadmin-dashboard.js"></script>
+</body>
+</html>

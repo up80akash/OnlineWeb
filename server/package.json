@@ -1,0 +1,20 @@
+{
+  "name": "fun-and-earning-server",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Backend API + static server for the Fun & Earning site and admin dashboard",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js"
+  },
+  "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "better-sqlite3": "^11.3.0",
+    "dotenv": "^16.4.5",
+    "express": "^4.19.2",
+    "jsonwebtoken": "^9.0.2",
+    "multer": "^2.2.0",
+    "nodemailer": "^9.0.5",
+    "ws": "^8.18.0"
+  }
+}

@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Admin Login — Fun &amp; Earning</title>
+<link rel="stylesheet" href="styles.css">
+<link rel="stylesheet" href="assets/site-background.css">
+<link rel="stylesheet" href="auth.css">
+</head>
+<body>
+
+<header class="site-header">
+  <div class="container nav">
+    <a href="login.html" class="logo">Fun <span>&amp;</span> Earning</a>
+  </div>
+</header>
+
+<main class="auth-main">
+  <div class="auth-card">
+    <div class="auth-brand">
+      <div class="badge">🔐</div>
+      <h1>Admin &amp; Sub-Admin Login</h1>
+      <p>Sign in with your registered mobile number</p>
+    </div>
+
+    <form id="admin-login-form" class="auth-form" novalidate>
+      <label for="admin-phone">Mobile Number</label>
+      <div class="phone-input">
+        <span class="phone-prefix"><span class="flag">🇮🇳</span> +91</span>
+        <input type="tel" id="admin-phone" name="phone" inputmode="numeric" maxlength="10" placeholder="98765 43210" required>
+      </div>
+      <span class="field-error" id="admin-phone-error"></span>
+
+      <label for="admin-password">Password</label>
+      <input type="password" id="admin-password" name="password" placeholder="Enter your password" required>
+      <span class="field-error" id="admin-password-error"></span>
+      <a href="#" id="forgot-password-link" class="forgot-password-link" data-testid="forgot-password-link">Forgot password?</a>
+
+      <button type="submit" class="btn btn-block">Login</button>
+      <p class="form-message" id="admin-login-message"></p>
+    </form>
+  </div>
+</main>
+
+<footer class="site-footer">
+  <div class="container">
+    <p>&copy; <span id="year"></span> Fun &amp; Earning. All rights reserved.</p>
+  </div>
+</footer>
+
+<div class="fp-modal-overlay hidden" id="forgot-password-modal">
+  <div class="fp-modal-card">
+    <button type="button" class="fp-modal-close" id="fp-modal-close" aria-label="Close">&times;</button>
+
+    <div class="fp-step" id="fp-step-email">
+      <h3>Forgot Password</h3>
+      <p class="hint">Enter your registered, verified email address and we'll send you a one-time code.</p>
+      <label for="fp-email-input">Email Address</label>
+      <input type="email" id="fp-email-input" placeholder="you@example.com" data-testid="fp-email-input">
+      <button type="button" class="btn btn-block" id="fp-send-otp-btn" data-testid="fp-send-otp-btn">Send OTP</button>
+      <p class="form-message" id="fp-email-msg"></p>
+    </div>
+
+    <div class="fp-step hidden" id="fp-step-otp">
+      <h3>Enter OTP</h3>
+      <p class="hint">We've sent a 6-digit code to <span id="fp-otp-email-label"></span>. It expires in 5 minutes.</p>
+      <label for="fp-otp-input">OTP</label>
+      <input type="text" id="fp-otp-input" inputmode="numeric" maxlength="6" placeholder="123456" data-testid="fp-otp-input">
+      <button type="button" class="btn btn-block" id="fp-verify-otp-btn" data-testid="fp-verify-otp-btn">Verify OTP</button>
+      <button type="button" class="fp-resend-link" id="fp-resend-otp-btn">Resend OTP</button>
+      <p class="form-message" id="fp-otp-msg"></p>
+    </div>
+
+    <div class="fp-step hidden" id="fp-step-reset">
+      <h3>Set a New Password</h3>
+      <p class="hint">Choose a new password for your account.</p>
+      <label for="fp-new-password">New Password</label>
+      <input type="password" id="fp-new-password" placeholder="Min 6 characters" data-testid="fp-new-password">
+      <label for="fp-confirm-password">Confirm Password</label>
+      <input type="password" id="fp-confirm-password" placeholder="Re-enter new password" data-testid="fp-confirm-password">
+      <button type="button" class="btn btn-block" id="fp-reset-btn" data-testid="fp-reset-btn">Reset Password</button>
+      <p class="form-message" id="fp-reset-msg"></p>
+    </div>
+
+    <div class="fp-step hidden" id="fp-step-done">
+      <div class="fp-success-icon">✅</div>
+      <h3 style="text-align:center;">Password Reset Successful</h3>
+      <p class="hint" style="text-align:center;">You can now log in with your new password.</p>
+      <button type="button" class="btn btn-block" id="fp-done-close-btn">Back to Login</button>
+    </div>
+  </div>
+</div>
+
+<script src="assets/site-background.js"></script>
+<script src="script.js"></script>
+<script src="admin-login.js"></script>
+<script src="forgot-password.js"></script>
+</body>
+</html>

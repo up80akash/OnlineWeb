@@ -1,0 +1,62 @@
+/* Shared colourful/joyful animated background for every non-game page
+   (login/register, all 3 dashboards' Profile/Wallet/Deposit/Withdrawal/
+   Referral/Transaction-history/Games-listing panels). Games keep their own
+   distinct per-game themes from assets/theme-engine.js -- this is the
+   site-wide ambient layer everything else sits on. Purely decorative:
+   fixed behind all real content, never intercepts clicks. */
+
+#site-bg {
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.site-bg-gradient {
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(ellipse 60% 50% at 12% 8%, rgba(59, 130, 246, 0.22), transparent 60%),
+    radial-gradient(ellipse 55% 45% at 88% 12%, rgba(168, 85, 247, 0.20), transparent 60%),
+    radial-gradient(ellipse 60% 50% at 50% 105%, rgba(236, 72, 153, 0.16), transparent 60%),
+    radial-gradient(ellipse 45% 40% at 95% 90%, rgba(250, 204, 21, 0.10), transparent 60%),
+    var(--bg, #0f1115);
+}
+
+.site-bg-blob {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(70px);
+  opacity: 0.4;
+  will-change: transform;
+}
+.site-bg-blob-a { width: 380px; height: 380px; top: -110px; left: -90px; background: #3b82f6; animation: site-bg-float-a 22s ease-in-out infinite; }
+.site-bg-blob-b { width: 320px; height: 320px; top: 15%; right: -110px; background: #a855f7; animation: site-bg-float-b 27s ease-in-out infinite; }
+.site-bg-blob-c { width: 300px; height: 300px; bottom: -90px; left: 28%; background: #ec4899; animation: site-bg-float-c 31s ease-in-out infinite; }
+.site-bg-blob-d { width: 220px; height: 220px; bottom: 10%; right: 8%; background: #facc15; opacity: 0.25; animation: site-bg-float-d 24s ease-in-out infinite; }
+
+@keyframes site-bg-float-a { 0%, 100% { transform: translate(0, 0) scale(1); } 50% { transform: translate(70px, 50px) scale(1.08); } }
+@keyframes site-bg-float-b { 0%, 100% { transform: translate(0, 0) scale(1); } 50% { transform: translate(-60px, 70px) scale(1.05); } }
+@keyframes site-bg-float-c { 0%, 100% { transform: translate(0, 0) scale(1); } 50% { transform: translate(50px, -60px) scale(1.1); } }
+@keyframes site-bg-float-d { 0%, 100% { transform: translate(0, 0); } 50% { transform: translate(-40px, -30px); } }
+
+.site-bg-canvas {
+  position: absolute;
+  inset: 0;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .site-bg-blob {
+    animation: none !important;
+  }
+}
+
+/* #site-bg sits at z-index: -1, fixed to the viewport -- it paints behind
+   every normal-flow element automatically (negative z-index is the
+   standard "full-page fixed background" technique), so nothing else on the
+   page needs a position/z-index change to sit above it. The gradient layer
+   replaces the flat body background so it's actually visible. */
+body {
+  background: transparent;
+}
